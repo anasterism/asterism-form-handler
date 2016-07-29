@@ -26,8 +26,8 @@ var Form = function(selector) {
 
 		request.open(this.method, this.action);
 		request.setRequestHeader('X-Requested-With','XMLHttpRequest');
-		request.addEventListener('load', function() { self.handleResponse(this) });
-		request.addEventListener('error', function() { self.handleError(this) });
+		request.addEventListener('load', function() { self.handleResponse(this); });
+		request.addEventListener('error', function() { self.handleError(this); });
 		request.send(data);
 	};
 
@@ -51,7 +51,7 @@ var Form = function(selector) {
 
 	this.handleResponse = function(response) {
 		if(response.status == 200) {
-			this.handleSuccess(response)
+			this.handleSuccess(response);
 		} else {
 			this.handleError(response);
 		}
@@ -66,27 +66,28 @@ var Form = function(selector) {
 	};
 
 	this.handleError = function(response) {
+	    var event = null;
 		if(response.status == 422) {
 			var data    = JSON.parse(response.responseText);
 			this.el.classList.add('hasErrors');
 			this.processValidationErrors(data);
-			var event = new CustomEvent('invalid', { detail: this.errors });
+			event = new CustomEvent('invalid', { detail: this.errors });
 		} else {
 			this.errors = 'An error was encountered while attempting to process your request.';
-			var event = new CustomEvent('error', { detail: this.errors });
+			event = new CustomEvent('error', { detail: this.errors });
 		}
 		this.enable();
 		this.el.dispatchEvent(event);
 	};
 
 	this.processValidationErrors = function(errors) {
-		var e = new Array();
+		var e = [];
 		for(var prop in errors) {
 			var error = {
 				el      : document.querySelector(selector + ' input[name=' + prop + ']'),
 				field   : prop,
 				message: errors[prop][0]
-			}
+			};
 			e.push(error);
 		}
 		this.errors = e;
@@ -94,4 +95,4 @@ var Form = function(selector) {
 
 	this.init();
 
-}
+};
