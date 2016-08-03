@@ -44,7 +44,7 @@ var commentForm = new Form('#commentForm');
 |-------------|:---------:|:--------------------------------------------------|
 | **disable** | *none*    | Disables the form, setting each input to readonly |
 | **enable**  | *none*    | Enables the form, removing the readonly attribute |
-| **clear**   | *none*    | Clears each element of it's value.                |
+| **reset**   | *none*    | Clears each element of it's value.                |
 
 ## Events
 
